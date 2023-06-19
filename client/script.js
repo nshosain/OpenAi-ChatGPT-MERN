@@ -10,16 +10,17 @@ let loadInterval;
 function loader(element) {
   element.textContent = "";
 
+  // runs every 300ms
   loadInterval = setInterval(() => {
     element.textContent += ".";
 
-    // runs every 300ms
-    if (element.textContent === "...") {
+    if (element.textContent === "....") {
       element.textContent = "";
     }
   }, 300);
 }
 
+// text type effect
 function typeText(element, text) {
   let index = 0;
 
@@ -43,8 +44,8 @@ function generateUniqueId() {
 
 function chatStripe(isAi, value, uniqueId) {
   return `
-    <div class="wrapper ${isAi && "ai"}">
-      <div class="chat>
+  <div class="wrapper ${isAi && "ai"}">
+      <div class="chat">
         <div class="profile">
           <img
             src="${isAi ? bot : user}"
@@ -76,6 +77,32 @@ const handleSubmit = async (e) => {
   const messageDiv = document.getElementById(uniqueId);
 
   loader(messageDiv);
+
+  const response = await fetch("http://localhost:5000", {
+    method: "POST",
+    headers: {
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prompt: data.get("prompt"),
+    }),
+  });
+
+  clearInterval(loadInterval);
+  messageDiv.innerHTML = "";
+
+  if (response.ok) {
+    const data = await response.json();
+    const parseData = data.bot.trim();
+
+    typeText(messageDiv, parseData);
+  } else {
+    const err = await response.text();
+
+    messageDiv.innerHTML = "Something went wrong";
+
+    alert(err);
+  }
 };
 
 form.addEventListener("submit", handleSubmit);
