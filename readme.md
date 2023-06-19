@@ -11,6 +11,5 @@
 
 <div align="center">
   🤖 Prompt OpenAI's codex to generate codes for you!<br />.</p>
+ <p> OpenAi's API indegration using JavaScript, NodeJS and Vanilla JavaScript </p>
 </div>
-
-<p> OpenAi's API indegration using JavaScript, NodeJS and Vanilla JavaScript </p>
